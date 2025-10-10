@@ -33,6 +33,8 @@ namespace GCook.Models;
         //não tenho certeza se assim tá certo
         public int Rendimento { get; set; }
 
+        public Dificuldade Dificuldade { get; set; }
+
         //adicionar a fk da dificuldade
 
         [StringLength(300)]
