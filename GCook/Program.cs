@@ -8,27 +8,27 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Serviço de conexão com o banco de dados - mysql
-string conexao = builder.Configuration.GetConnectionString("GCook")
+// Serviço de conexão com o banco de dados
+string conexao = builder.Configuration.GetConnectionString("GCookDb");
 var versao = ServerVersion.AutoDetect(conexao);
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseMySql(conexao, versao)
 );
 
-//Serviço de identificação de usuário
-builder.Service.AddIdentity<Usuario, IdentityRole>(
+// Serviço de identificação de usuário
+builder.Services.AddIdentity<Usuario, IdentityRole>(
     options =>
     {
-        options.SignIn.RequiredConfirmedEmail = true;
-        options.User.RequiredUniqueEmail = true;
+        options.SignIn.RequireConfirmedEmail = true;
+        options.User.RequireUniqueEmail = true;
     }
-).AddEntityFrameworkStores<AppDbContext>()
-.AddDefaulTokenProviders();
-
+)
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
-//Garantir que o banco exista ao executar o projeto
+// Garantir que o banco exista ao executar o projeto
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider
